@@ -23,68 +23,70 @@ You will need to install `tesseract` with your desired language on your system,
 `pdftoppm` needs to be available and also `image-magick`.
 
 ## Usage
+
 ```ruby
   require 'ocr-file'
 
-  config = {
-    # Images from PDF
-    filetype: 'png',
-    quality: 100,
-    dpi: 300,
-    # Text to PDF
-    font: 'Helvetica',
-    font_size: 5, #8 # 12
-    text_x: 20,
-    text_y: 800,
-    minimum_word: 5,
-    # Cloud-Vision OCR
-    image_annotator: nil, # Needed for Cloud-Vision
-    type_of_ocr: OcrFile::OcrEngines::CloudVision::DOCUMENT_TEXT_DETECTION,
-    ocr_engine: 'tesseract', # 'cloud-vision'
-    # Image Pre-Processing
-    image_preprocess: true,
-    effects: ['despeckle', 'deskew', 'enhance', 'sharpen', 'remove_shadow', 'bw'], # Applies effects as listed. 'norm' is also available
-    automatic_reprocess: true, # Will possibly do double + the operations but can produce better results automatically
-    dimensions: [width, height], # Can be nil but will lock the images
-    # PDF to Image Processing
-    optimise_pdf: true,
-    extract_pdf_images: true, # if false will screenshot each PDF page
-    temp_filename_prefix: 'image',
-    spelling_correction: true, # Will attempt to fix text at the end (not used for searchable pdf output)
-    keep_files: false,
-    # Console Output
-    verbose: true,
-    timing: true
-  }
+config = {
+        # Images from PDF
+        filetype: 'png',
+        quality: 100,
+        dpi: 300,
+        # Text to PDF
+        font: 'Helvetica',
+        font_size: 5, #8 # 12
+        text_x: 20,
+        text_y: 800,
+        minimum_word: 5,
+        # Cloud-Vision OCR
+        image_annotator: nil, # Needed for Cloud-Vision
+        type_of_ocr: OcrFile::OcrEngines::CloudVision::DOCUMENT_TEXT_DETECTION,
+        ocr_engine: 'tesseract', # 'cloud-vision'
+        # Image Pre-Processing
+        image_preprocess: true,
+        effects: %w[despeckle deskew enhance sharpen remove_shadow bw], # Applies effects as listed. 'norm' is also available
+        automatic_reprocess: true, # Will possibly do double + the operations but can produce better results automatically
+        dimensions: [width, height], # Can be nil but will lock the images
+        # PDF to Image Processing
+        optimise_pdf: true,
+        extract_pdf_images: true, # if false will screenshot each PDF page
+        temp_filename_prefix: 'image',
+        spelling_correction: true, # Will attempt to fix text at the end (not used for searchable pdf output)
+        keep_files: false,
+        # Console Output
+        verbose: true,
+        timing: true,
+        lang: 'chi_sim' # 配置識別語言體系
+}
 
-  doc = OcrFile::Document.new(
-    original_file_path: '/path-to-original-file/', # supports PDFs and images
-    save_file_path: '/folder-to-save-to/',
-    config: config # Not needed as defaults are used when not provided
-  )
+doc = OcrFile::Document.new(
+        original_file_path: '/path-to-original-file/', # supports PDFs and images
+        save_file_path: '/folder-to-save-to/',
+        config: config # Not needed as defaults are used when not provided
+)
 
-  doc.to_s # Returns text, removes temp files and wont save
-  doc.to_pdf # Saves a PDF (either searchable over the images or dumped text)
-  doc.to_text # Saves a text file with OCR text
+doc.to_s # Returns text, removes temp files and wont save
+doc.to_pdf # Saves a PDF (either searchable over the images or dumped text)
+doc.to_text # Saves a text file with OCR text
 
-  # How to generate PDFs of images or text files:
-  original_file_path = 'file.txt' OR 'file.png'
+# How to generate PDFs of images or text files:
+original_file_path = 'file.txt' OR 'file.png'
 
-  doc = OcrFile::Document.new(
-    original_file_path: original_file_path, # supports PDFs and images
-    save_file_path: '/folder-to-save-to/',
-    config: config # Not needed as defaults are used when not provided
-  )
+doc = OcrFile::Document.new(
+        original_file_path: original_file_path, # supports PDFs and images
+        save_file_path: '/folder-to-save-to/',
+        config: config # Not needed as defaults are used when not provided
+)
 
-  doc.to_pdf
+doc.to_pdf
 
-  # How to merge files into a single PDF:
-  # The files can be images or other PDFs
-  file_paths = []
-  merged_document = ::HexaPDF::Document.new
-  dimensions = [width, height] # or nil to maintain dimensions
-  documents = file_paths.map { |path| OcrFile::ImageEngines::PdfEngine.insert_image(merged_document, path, dimensions: dimensions) }
-  OcrFile::ImageEngines::PdfEngine.save_pdf(merged_document, save_file_path, optimise: true)
+# How to merge files into a single PDF:
+# The files can be images or other PDFs
+file_paths = []
+merged_document = ::HexaPDF::Document.new
+dimensions = [width, height] # or nil to maintain dimensions
+documents = file_paths.map { |path| OcrFile::ImageEngines::PdfEngine.insert_image(merged_document, path, dimensions: dimensions) }
+OcrFile::ImageEngines::PdfEngine.save_pdf(merged_document, save_file_path, optimise: true)
 ```
 
 ### Notes / Tips
