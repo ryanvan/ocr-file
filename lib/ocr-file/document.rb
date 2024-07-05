@@ -3,7 +3,7 @@ module OcrFile
     # TODO: Skewness / text orientation detection
     # TODO: Better handwriting analysis
 
-    ACCEPTED_IMAGE_TYPES = ['png', 'jpeg', 'jpg', 'tiff', 'bmp']
+    ACCEPTED_IMAGE_TYPES = %w[png jpeg jpg tiff bmp]
     PAGE_BREAK = "\n\r\n" # TODO: Make configurable
     EFFECTS_TO_REMOVE = ['', 'norm', 'remove_shadow', 'bw']
     DEFAULT_CONFIG = {
@@ -23,7 +23,7 @@ module OcrFile
       ocr_engine: 'tesseract', # 'cloud-vision'
       # Image Pre-Processing
       image_preprocess: true,
-      effects: ['despeckle', 'deskew', 'enhance', 'sharpen', 'remove_shadow', 'bw'],
+      effects: %w[despeckle deskew enhance sharpen remove_shadow bw],
       automatic_reprocess: true,
       dimensions: nil, # width, height. Will lock images to these dimensions
       # PDF to Image Processing

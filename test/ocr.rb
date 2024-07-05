@@ -17,12 +17,12 @@ require 'ocr-file'
     ocr_engine: 'tesseract', # 'cloud-vision'
     # Image Pre-Processing
     image_preprocess: true,
-    effects: ['despeckle', 'deskew', 'enhance', 'sharpen', 'remove_shadow'], # Applies effects as listed. 'norm' is also available
+    effects: %w[despeckle deskew enhance sharpen remove_shadow], # Applies effects as listed. 'norm' is also available
     automatic_reprocess: true, # Will possibly do double + the operations but can produce better results automatically
     #dimensions: [width, height], # Can be nil but will lock the images
     # PDF to Image Processing
     optimise_pdf: true,
-    extract_pdf_images: true, # if false will screenshot each PDF page
+    extract_pdf_images: false, # if false will screenshot each PDF page
     temp_filename_prefix: 'image',
     spelling_correction: false, # Will attempt to fix text at the end (not used for searchable pdf output)
     keep_files: false,
@@ -32,8 +32,8 @@ require 'ocr-file'
   }
 
   doc = OcrFile::Document.new(
-    original_file_path: 'system_analyer.pdf', # supports PDFs and images
-    save_file_path: 'system_analyer_v1.pdf',
+    original_file_path: '/home/carp/projects/ocr-file/test/gl.pdf', # supports PDFs and images
+    save_file_path: 'gl_v2.pdf',
     config: config # Not needed as defaults are used when not provided
   )
 
